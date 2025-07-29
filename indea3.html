@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>掛け算の問題</title>
+</head>
+<body>
+    <div id="problem"></div>
+    <div id="countdown"></div>
+
+    <script>
+        function generateProblem() {
+            // 11から19までの数字からランダムに2つ選択
+            var num1 = Math.floor(Math.random() * 9) + 11;
+            var num2 = Math.floor(Math.random() * 9) + 11;
+
+            // 掛け算の問題を表示
+            document.getElementById("problem").innerText = num1 + " × " + num2 + " = ?";
+
+            // カウントダウンを開始
+            var countdown = 30;
+            var countdownInterval = setInterval(function() {
+                document.getElementById("countdown").innerText = "残り時間: " + countdown + "秒";
+                countdown--;
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    // カウントダウンが終了したら答えを表示
+                    document.getElementById("problem").innerText = num1 + " × " + num2 + " = " + (num1 * num2);
+                    document.getElementById("countdown").innerText = "";
+
+                    // 10秒後に次の問題を表示
+                    setTimeout(generateProblem, 10000);
+                }
+            }, 1000);
+        }
+
+        // 初期問題を生成
+        generateProblem();
+    </script>
+</body>
+</html>

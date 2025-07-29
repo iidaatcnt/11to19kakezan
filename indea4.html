@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>掛け算の問題</title>
+</head>
+<body>
+    <div id="problem"></div>
+    <div id="countdown"></div>
+    <div id="answers"></div>
+
+    <script>
+        var problems = []; // 問題と答えを保存する配列
+
+        function generateProblem() {
+            if (problems.length >= 10) {
+                // 10回の問題が終わったら答え合わせを表示
+                document.getElementById("answers").innerHTML = "<h2>答え合わせ</h2>";
+                problems.forEach(function(problem, index) {
+                    document.getElementById("answers").innerHTML += (index + 1) + ". " + problem.question + " 答え: " + problem.answer + "<br>";
+                });
+                return; // ループ終了
+            }
+
+            // 11から19までの数字からランダムに2つ選択
+            var num1 = Math.floor(Math.random() * 9) + 11;
+            var num2 = Math.floor(Math.random() * 9) + 11;
+
+            // 掛け算の問題を表示
+            document.getElementById("problem").innerText = num1 + " × " + num2 + " = ?";
+
+            // カウントダウンを開始
+            var countdown = 30;
+            var countdownInterval = setInterval(function() {
+                document.getElementById("countdown").innerText = "残り時間: " + countdown + "秒";
+                countdown--;
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    // カウントダウンが終了したら答えを表示
+                    var answer = num1 * num2;
+                    document.getElementById("problem").innerText = num1 + " × " + num2 + " = " + answer;
+                    document.getElementById("countdown").innerText = "";
+
+                    // 問題と答えを配列に保存
+                    problems.push({
+                        question: num1 + " × " + num2,
+                        answer: answer
+                    });
+
+                    // 10秒後に次の問題を表示
+                    setTimeout(generateProblem, 10000);
+                }
+            }, 1000);
+        }
+
+        // 初期問題を生成
+        generateProblem();
+    </script>
+</body>
+</html>

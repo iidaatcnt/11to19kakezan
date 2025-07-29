@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>掛け算の問題</title>
+</head>
+<body>
+    <div id="problem"></div>
+
+    <script>
+        // 11から19までの数字からランダムに2つ選択
+        var num1 = Math.floor(Math.random() * 9) + 11;
+        var num2 = Math.floor(Math.random() * 9) + 11;
+
+        // 掛け算の問題を表示
+        document.getElementById("problem").innerText = num1 + " × " + num2 + " = ?";
+
+        function showAnswer() {
+            // 掛け算の結果を表示
+            document.getElementById("problem").innerText = num1 + " × " + num2 + " = " + (num1 * num2);
+        }
+
+        // 3秒後に答えを表示
+        setTimeout(showAnswer, 8000);
+    </script>
+</body>
+</html>

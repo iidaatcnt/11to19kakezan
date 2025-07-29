@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ビープ音カウントダウン</title>
+</head>
+<body>
+    <div id="countdown-display">カウントダウンを開始するには、ボタンをクリックしてください。</div>
+    <button onclick="startCountdown()">カウントダウン開始</button>
+
+    <script>
+        var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function beep(duration, frequency, volume) {
+            var oscillator = audioCtx.createOscillator();
+            var gainNode = audioCtx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            gainNode.gain.value = volume;
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'square';
+
+            oscillator.start(audioCtx.currentTime);
+            oscillator.stop(audioCtx.currentTime + duration * 0.001);
+        }
+
+        function startCountdown() {
+            var countdown = [3, 2, 1, 0];
+            countdown.forEach(function(number, index) {
+                setTimeout(function() {
+                    if (number > 0) {
+                        beep(100, 700, 0.5); // 短いビープ音
+                    } else {
+                        beep(700, 1000, 0.5); // 長いビープ音（スタート）
+                    }
+                    document.getElementById("countdown-display").innerText = number > 0 ? number : "スタート！";
+                }, index * 1000);
+            });
+        }
+    </script>
+</body>
+</html>

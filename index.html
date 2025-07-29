@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>掛け算の問題</title>
+    <style>
+        body {
+            font-size: 16px;
+        }
+        @media (max-width: 600px) {
+            body {
+                font-size: 20px;
+            }
+        }
+        #show-answer-button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="problem-number"></div>
+    <div id="problem"></div>
+    <div id="countdown"></div>
+    <button id="show-answer-button" onclick="showAnswer()">正解を見る</button>
+    <div id="answers"></div>
+
+    <script>
+        var problems = []; // 問題と答えを保存する配列
+        var countdownInterval; // カウントダウンのインターバルを格納する変数
+        var answerShown = false; // 答えが表示されたかどうかを追跡するフラグ
+        var currentNum1, currentNum2; // 現在の問題の数字を格納する変数
+
+        function generateProblem() {
+            answerShown = false;
+            document.getElementById("show-answer-button").style.display = "block"; // 「正解を見る」ボタンを表示
+
+            if (problems.length >= 10) {
+                // 10回の問題が終わったら答え合わせを表示
+                document.getElementById("problem-number").innerText = "";
+                document.getElementById("problem").innerText = "";
+                document.getElementById("countdown").innerText = "";
+                document.getElementById("show-answer-button").style.display = "none";
+                document.getElementById("answers").innerHTML = "<h2>答え合わせ</h2>";
+                problems.forEach(function(problem, index) {
+                    document.getElementById("answers").innerHTML += (index + 1) + ". " + problem.question + " 答え: " + problem.answer + "<br>";
+                });
+                return; // ループ終了
+            }
+
+            // 現在の問題番号を表示
+            document.getElementById("problem-number").innerText = "問題 " + (problems.length + 1);
+
+            // 11から19までの数字からランダムに2つ選択
+            currentNum1 = Math.floor(Math.random() * 9) + 11;
+            currentNum2 = Math.floor(Math.random() * 9) + 11;
+
+            // 掛け算の問題を表示
+            document.getElementById("problem").innerText = currentNum1 + " × " + currentNum2 + " = ?";
+
+            // カウントダウンを開始
+            var countdown = 30;
+            clearInterval(countdownInterval); // 前のカウントダウンをクリア
+            countdownInterval = setInterval(function() {
+                document.getElementById("countdown").innerText = "残り時間: " + countdown + "秒";
+                countdown--;
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    showAnswer();
+                }
+            }, 1000);
+        }
+
+        function showAnswer() {
+            if (!answerShown) {
+                var answer = currentNum1 * currentNum2;
+                document.getElementById("problem").innerText = currentNum1 + " × " + currentNum2 + " = " + answer;
+                document.getElementById("countdown").innerText = "";
+                document.getElementById("show-answer-button").style.display = "none"; // 「正解を見る」ボタンを非表示
+                clearInterval(countdownInterval);
+
+                // 問題と答えを配列に保存
+                problems.push({
+                    question: currentNum1 + " × " + currentNum2,
+                    answer: answer
+                });
+
+                // 10秒後に次の問題を表示
+                setTimeout(generateProblem, 10000);
+                answerShown = true;
+            }
+        }
+
+        // 初期問題を生成
+        generateProblem();
+    </script>
+</body>
+</html>
